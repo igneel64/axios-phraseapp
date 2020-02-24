@@ -2,7 +2,7 @@
   "name": "axios-phraseapp",
   "version": "0.0.1",
   "description": "Axios package to provide useful information and functionality about interactions with the PhraseApp API",
-  "main": "./dist/axios-phraseapp.min.js",
+  "main": "./dist/axios-phraseapp.js",
   "scripts": {
     "test": "jest",
     "prebuild": "rimraf dist",
@@ -48,7 +48,7 @@
   "bundlesize": [
     {
       "path": "./dist/axios-phraseapp.js",
-      "maxSize": "1.5 kB"
+      "maxSize": "1.2 kB"
     }
   ],
   "jest": {
