@@ -148,7 +148,6 @@ The second argument to the `attach` method, can take a custom configuration obje
 
 - [ ] Examples folder
 - [ ] Full usage typings
-- [ ] Travis CI
 - [ ] More badges
 - [ ] Strategies for canceling befora quota is reached
 

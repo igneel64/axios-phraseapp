@@ -5,9 +5,13 @@
   "main": "./dist/axios-phraseapp.js",
   "scripts": {
     "test": "jest",
-    "prebuild": "rimraf dist",
+    "prebuild": "npm test && rimraf dist",
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "postbuild": "bundlesize"
+    "postbuild": "bundlesize",
+    "prerelease": "npm run build",
+    "release": "npm version -m \"Released %s !\"",
+    "postrelease": "npm run push && npm publish",
+    "push": "git push origin master && git push origin --tags"
   },
   "keywords": [
     "axios",
