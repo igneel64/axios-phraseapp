@@ -1,6 +1,6 @@
 {
   "name": "axios-phraseapp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Axios package to provide useful information and functionality about interactions with the PhraseApp API",
   "main": "./dist/axios-phraseapp.js",
   "scripts": {
