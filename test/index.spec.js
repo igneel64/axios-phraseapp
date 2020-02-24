@@ -9,7 +9,7 @@ import {
   attach as axiosPhraseAttach,
   detach as axiosPhraseDetach
 } from "../lib/index";
-import { fastForward } from "./util";
+import { fastForward, sleep } from "./util";
 
 const PHRASEAPP_REQUEST = "https://api.phrase.com/v2/";
 
@@ -32,7 +32,7 @@ describe("axios-phraseapp functionality", () => {
     expect(config).not.toHaveProperty("phraseApp.moduleConfig");
   });
 
-  it("Sets up configuration info", async () => {
+  it("Sets up default configuration info", async () => {
     [reqInterceptor, resInterceptor] = axiosPhraseAttach();
 
     nock(PHRASEAPP_REQUEST)
@@ -62,13 +62,36 @@ describe("axios-phraseapp functionality", () => {
     expect(config).toHaveProperty("phraseApp.state.limit", "1000");
   });
 
+  it("Merges custom configuration with default", async () => {
+    [reqInterceptor, resInterceptor] = axiosPhraseAttach(undefined, {
+      cancelOnQuota: true
+    });
+
+    nock(PHRASEAPP_REQUEST)
+      .get("/")
+      .times(1)
+      .reply(() => [200, true]);
+
+    const { config } = await axios.get(PHRASEAPP_REQUEST);
+    expect(config).toHaveProperty("phraseApp");
+    expect(config).toHaveProperty("phraseApp.moduleConfig");
+    expect(config).toHaveProperty("phraseApp.moduleConfig.logOnLimit", -1);
+    expect(config).toHaveProperty("phraseApp.moduleConfig.cancelOnQuota", true);
+    expect(config).toHaveProperty(
+      "phraseApp.moduleConfig.logFunction",
+      console.log
+    );
+  });
+
   it("Cancels after limit has been reached with 'cancelOnQuota'", async () => {
     [reqInterceptor, resInterceptor] = axiosPhraseAttach(undefined, {
       cancelOnQuota: true
     });
-    const refreshDate = fastForward();
+    const refreshDate = fastForward(0, 1);
 
+    /** Convert Timestamp to Unix Epoch as returned by PhraseApp */
     const resetTimestamp = Math.round(Date.parse(refreshDate) / 1000);
+
     nock(PHRASEAPP_REQUEST)
       .get("/")
       .times(1)
@@ -90,6 +113,9 @@ describe("axios-phraseapp functionality", () => {
         `[axios-phraseapp] No remaining quota. Wait until ${refreshDate}`
       )
     );
+    // TODO: Consider what to do with module state
+    /** Wait for the "reset" time to pass  */
+    await sleep(1500);
   });
 
   it("Logs after specified limit has been reached", async () => {
@@ -97,6 +123,7 @@ describe("axios-phraseapp functionality", () => {
     console.log = jest.fn();
     [reqInterceptor, resInterceptor] = axiosPhraseAttach(undefined, {
       logOnLimit: LOG_LIMIT_INT,
+      cancelOnQuota: true,
       logFunction: console.log
     });
 
