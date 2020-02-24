@@ -1,5 +1,9 @@
 # Axios PhraseApp
 
+[![travis](https://travis-ci.org/igneel64/axios-phraseapp.svg?branch=master)](https://travis-ci.org/igneel64/axios-phraseapp)
+[![npm](https://img.shields.io/npm/v/axios-phraseapp.svg)](https://www.npmjs.com/package/axios-phraseapp)
+[![gzip size](http://img.badgesize.io/https://unpkg.com/axios-phraseapp?compression=gzip&label=gzip)](https://unpkg.com/axios-phraseapp)
+
 Axios middleware/interceptor that helps to guard a bit against PhraseApp rate limiting. Highly configurable
 
 ## Installation
@@ -148,7 +152,6 @@ The second argument to the `attach` method, can take a custom configuration obje
 
 - [ ] Examples folder
 - [ ] Full usage typings
-- [ ] More badges
 - [ ] Strategies for canceling befora quota is reached
 
 ## License
